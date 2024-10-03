@@ -44,12 +44,17 @@ jobs:
 
             - name: Build firmware images
               run:  make -j$(($(nproc)+1)) world
+            
+            - name: Prepare release note
+              run:  sh release.sh
 
             - name: Get SHA
               uses: benjlevesque/short-sha@v2.2
+            
 
             - name: Release
               uses: ncipollo/release-action@v1
               with:
                 tag: qualcommax-foss-${{ env.SHA }}
-                artifacts: bin/targets/qualcommax/ipq807x/openwrt-qualcommax-ipq807x-linksys_mx4300*
+                artifacts: release/*
+                bodyFile: note.md
